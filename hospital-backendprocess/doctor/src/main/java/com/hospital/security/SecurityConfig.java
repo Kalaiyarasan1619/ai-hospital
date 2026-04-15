@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ⭐ MOST IMPORTANT
                         .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/doctors", "/api/doctors/").permitAll()
                         .requestMatchers("/api/doctors/internal/ai-context").permitAll()
                         .requestMatchers("/api/doctors/add", "/api/doctors/delete/**").hasRole("ADMIN")
                         .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN", "USER")

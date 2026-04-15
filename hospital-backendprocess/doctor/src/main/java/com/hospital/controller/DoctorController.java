@@ -29,6 +29,11 @@ public class DoctorController {
         return ResponseEntity.ok(saved);
     }
 
+    @GetMapping("/")
+    public String check(){
+        return "Doctor";
+    }
+
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<List<Doctor>> getAllDoctors() {

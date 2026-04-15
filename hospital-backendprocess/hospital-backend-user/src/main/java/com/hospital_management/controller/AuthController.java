@@ -47,6 +47,11 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @GetMapping("/")
+    public String test(){
+        return "User Service";
+    }
+
     @PostMapping("/signin")
 public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
     // DB la email ku match panna user fetch pannuvom
