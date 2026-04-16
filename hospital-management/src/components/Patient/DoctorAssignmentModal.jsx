@@ -3,8 +3,9 @@ import axios from "axios";
 import { FaUserMd, FaTimes, FaCalendarAlt, FaClock } from "react-icons/fa";
 import { CheckCircleIcon, XMarkIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 
-const PATIENT_API = "http://localhost:8082/api/patients";
-
+// const PATIENT_API = "http://localhost:8082/api/patients";
+const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
+const DOCTOR_API = 'https://ai-hospital-doctor.onrender.com/api/doctors';
 const getToken = () => {
   let token = localStorage.getItem("token");
   if (token) token = token.replace(/"/g, "");
@@ -38,7 +39,7 @@ const DoctorAssignmentModal = ({ isOpen, onClose, patientId, patientName, onAssi
         }
         
         const response = await axios.get(
-          "http://localhost:8081/api/doctors/all",
+          DOCTOR_API + "/all",
           {
             headers: {
               Authorization: `Bearer ${token}`,
