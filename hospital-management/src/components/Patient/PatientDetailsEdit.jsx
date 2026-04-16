@@ -23,6 +23,8 @@ import {
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 
+const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
+
 const PatientDetailsEdit = () => {
   const navigate = useNavigate();
   const { patientId } = useParams();
@@ -102,7 +104,7 @@ const PatientDetailsEdit = () => {
         }
         
         const response = await axios.get(
-          `http://localhost:8082/api/patients/${patientId}`,
+          PATIENT_API + `/${patientId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -293,7 +295,7 @@ const PatientDetailsEdit = () => {
           profileImage: profileImage
         };
 
-        const response = await axios.put(`http://localhost:8083/api/patients/${patientId}`, payload, {
+        const response = await axios.put(PATIENT_API + `/${patientId}`, payload, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`

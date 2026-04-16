@@ -25,8 +25,8 @@ import {
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 
-const PATIENT_API = "http://localhost:8082/api/patients";
-
+// const PATIENT_API = "http://localhost:8082/api/patients";
+const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
 /** Align with backend {@code PatientModeHelper}: IP / Inpatient / admitted → display "Inpatient", else "Outpatient". */
 function normalizePatientModeToDisplay(patientMode) {
   if (patientMode == null || String(patientMode).trim() === "") {
@@ -101,7 +101,7 @@ const PatientsView = () => {
         throw new Error("Authentication token not found");
       }
 
-      const response = await axios.get(`${PATIENT_API}/list-with-latest-visit`, {
+        const response = await axios.get(`${PATIENT_API}/list-with-latest-visit`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

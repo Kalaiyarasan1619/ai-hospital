@@ -17,7 +17,8 @@ import {
   HomeIcon
 } from '@heroicons/react/24/outline';
 
-const PATIENT_API = 'http://localhost:8082/api/patients';
+// const PATIENT_API = 'http://localhost:8082/api/patients';
+const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
 
 const emptyStats = () => ({
   totalPatients: 0,

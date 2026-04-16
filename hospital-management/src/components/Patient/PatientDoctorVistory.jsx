@@ -22,6 +22,8 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline';
 
+const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
+
 const PatientDoctorHistory = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
@@ -51,7 +53,7 @@ const PatientDoctorHistory = () => {
         }
         
         const response = await axios.get(
-          `http://localhost:8082/api/patients/doctor_visit/${patientId}`,
+          PATIENT_API + `/doctor_visit/${patientId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -73,7 +75,7 @@ const PatientDoctorHistory = () => {
           // Also fetch patient details if available
           try {
             const patientResponse = await axios.get(
-              `http://localhost:8083/api/patients/${id}`,
+              PATIENT_API + `/${id}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`

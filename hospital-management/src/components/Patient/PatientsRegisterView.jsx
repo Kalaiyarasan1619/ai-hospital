@@ -22,6 +22,8 @@ import {
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 
+const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
+
 function isAdminRole() {
   const r = localStorage.getItem('role');
   if (!r) return false;
@@ -257,7 +259,7 @@ const PatientsRegisterView = () => {
         profileImage: profileImage
       };
 
-      const response = await fetch("http://localhost:8082/api/patients/add", {
+      const response = await fetch(PATIENT_API + "/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

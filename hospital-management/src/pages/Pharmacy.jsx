@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BeakerIcon, CubeIcon, TruckIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 
+const PHARMACY_API = 'https://ai-hospital-pharmacy.onrender.com/api/pharmacy';
+
 const PHARMACY_APIS = [
-  'http://localhost:8084/api/pharmacy/details',
+  PHARMACY_API + '/details',
 ];
 
 const iconByService = {

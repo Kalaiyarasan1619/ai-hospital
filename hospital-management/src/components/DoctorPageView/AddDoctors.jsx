@@ -34,6 +34,9 @@ const AddDoctors = () => {
 
   // Form validation errors
   const [errors, setErrors] = useState({});
+  
+  // const DOCTOR_API = 'http://localhost:8081/api/doctors';
+  const DOCTOR_API = 'https://ai-hospital-doctor.onrender.com/api/doctors';
 
   // Form data
   const [formData, setFormData] = useState({
@@ -323,7 +326,7 @@ const AddDoctors = () => {
       }
       payload.workingHours = cleanedWorkingHours;
 
-      const response = await fetch("http://localhost:8081/api/doctors/add", {
+      const response = await fetch(DOCTOR_API + "/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

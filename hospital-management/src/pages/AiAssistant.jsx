@@ -6,16 +6,20 @@ const buildAskUrls = (rawBase) => {
   const base = rawBase.replace(/\/$/, '');
   if (base.endsWith('/ask')) return [base];
   if (base.includes('/api/ai')) return [`${base}/ask`];
-  if (base.includes(':8000')) return [`${base}/ask`, `${base}/api/ai/ask`];
   return [`${base}/api/ai/ask`, `${base}/ask`];
 };
 
+// const AI_SERVICE_URLS = [
+//   ...buildAskUrls(import.meta.env.VITE_AI_SERVICE_URL),
+//   'http://localhost:8000/ask',
+//   'https://ai-hospital-python-ai-service.onrender.com/ask',
+//   'https://ai-hospital-python-ai-service.onrender.com/api/ai/ask',
+//   '/api/ai/ask',
+// ].filter(Boolean);
+
 const AI_SERVICE_URLS = [
-  ...buildAskUrls(import.meta.env.VITE_AI_SERVICE_URL),
-  'http://localhost:9090/api/ai/ask',
-  'http://localhost:8000/ask',
-  '/api/ai/ask',
-].filter(Boolean);
+  'https://ai-hospital-python-ai-service.onrender.com/ask'
+];
 
 export default function AiAssistant() {
   const [question, setQuestion] = useState('');
@@ -54,7 +58,7 @@ export default function AiAssistant() {
     }
 
     setError(
-      `${lastErr} Use the API gateway endpoint (/api/ai/ask via port 9090) and ensure gateway + ai-service are running.`,
+      `${lastErr} Check VITE_AI_SERVICE_URL, your API gateway path /api/ai/ask, and that the deployed ai-service is reachable.`,
     );
     setLoading(false);
   }, [question]);

@@ -8,6 +8,7 @@ import {
   EyeSlashIcon
 } from '@heroicons/react/24/outline';
 
+const AUTH_API = 'https://ai-hospital-user.onrender.com/api/auth';
 const Login = ({ onLoginSuccess, onBack }) => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -65,7 +66,7 @@ const Login = ({ onLoginSuccess, onBack }) => {
 
       if (isSignIn) {
         // --- LOGIN ---
-        const res = await fetch('http://localhost:8080/api/auth/signin', {
+          const res = await fetch(AUTH_API + '/signin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -99,7 +100,7 @@ const Login = ({ onLoginSuccess, onBack }) => {
 
       } else {
         // --- SIGNUP ---
-        const res = await fetch('http://localhost:8080/api/auth/signup', {
+        const res = await fetch(AUTH_API + '/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

@@ -37,6 +37,8 @@ const DoctorsList = () => {
     fetchDoctors();
   }, []);
 
+  const DOCTOR_API = 'https://ai-hospital-doctor.onrender.com/api/doctors';
+
   const fetchDoctors = async () => {
     try {
       setLoading(true);
@@ -53,7 +55,7 @@ const DoctorsList = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:8081/api/doctors/all", {
+      const response = await fetch(DOCTOR_API + "/all", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

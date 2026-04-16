@@ -10,12 +10,14 @@ const ViewDoctor = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
+
+  const DOCTOR_API = 'https://ai-hospital-doctor.onrender.com/api/doctors';
   useEffect(() => {
     const fetchDoctorData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8081/api/doctors/${id}`, {
+        const response = await fetch(DOCTOR_API + `/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -49,7 +51,7 @@ const ViewDoctor = () => {
     setDeleteLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:8081/api/doctors/${id}`, {
+      const response = await fetch(DOCTOR_API + `/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
