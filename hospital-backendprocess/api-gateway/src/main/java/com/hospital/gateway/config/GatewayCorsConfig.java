@@ -20,7 +20,7 @@ public class GatewayCorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOriginPatterns(
-                List.of("http://localhost:*", "http://127.0.0.1:*"));
+                List.of("http://localhost:*", "http://127.0.0.1:*", "https://ai-hospital-hazel.vercel.app", "https://ai-hospital-python-ai-service.onrender.com" ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization", "Content-Type"));

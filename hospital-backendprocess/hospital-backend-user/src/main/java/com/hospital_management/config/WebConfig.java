@@ -15,7 +15,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8080") 
+                        .allowedOrigins("http://localhost:8080", "https://ai-hospital-user.onrender.com","https://ai-hospital-hazel.vercel.app", "https://ai-hospital-python-ai-service.onrender.com") 
                         // Expo local dev origins
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
