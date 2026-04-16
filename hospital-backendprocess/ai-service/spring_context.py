@@ -8,11 +8,39 @@ import os
 
 import requests
 
-DEFAULT_GATEWAY = "http://localhost:9090"
+DEFAULT_GATEWAY = "https://ai-hospital-api-gateway.onrender.com"
 
 
 def _as_list(value: str) -> list[str]:
     return [x.strip().rstrip("/") for x in (value or "").split(",") if x.strip()]
+
+
+def _candidate_urls(
+    gateway: str, gateway_path: str, fallback_env: str, fallback_default: str
+) -> list[str]:
+    """
+    Build try-order for one internal context endpoint.
+
+    Built-in HTTPS fallbacks are always included (deduped). If *SERVICE_INTERNAL_URLS
+    pointed at a dead base URL, older code omitted defaults; that is fixed here.
+    """
+    seen: set[str] = set()
+    out: list[str] = []
+
+    def add(u: str) -> None:
+        u = (u or "").strip().rstrip("/")
+        if not u or u in seen:
+            return
+        seen.add(u)
+        out.append(u)
+
+    g = gateway.rstrip("/")
+    add(f"{g}{gateway_path}")
+    for x in _as_list(os.getenv(fallback_env, "")):
+        add(x)
+    for x in _as_list(fallback_default):
+        add(x)
+    return out
 
 
 def _fetch_from_candidates(
@@ -23,7 +51,8 @@ def _fetch_from_candidates(
         try:
             r = requests.get(url, headers=headers, timeout=12)
             if r.status_code == 401:
-                return f"({label}: unauthorized — check AI_INTERNAL_KEY matches Spring app.aiInternalKey)"
+                last_error = "HTTP 401 (X-AI-Internal-Key / app.aiInternalKey mismatch for this host)"
+                continue
             if r.status_code in (404, 503):
                 last_error = f"HTTP {r.status_code}"
                 continue
@@ -56,32 +85,29 @@ def fetch_live_hospital_context() -> str:
         (
             "/api/users/internal/ai-context",
             "USER_SERVICE_INTERNAL_URLS",
-            "http://localhost:8080/api/users/internal/ai-context",
+            "https://ai-hospital-user.onrender.com/api/users/internal/ai-context",
             "User accounts (Spring / user-service DB)",
         ),
         (
             "/api/patients/internal/ai-context",
             "PATIENT_SERVICE_INTERNAL_URLS",
-            "http://localhost:8082/api/patients/internal/ai-context",
+            "https://ai-hospital-patient-service.onrender.com/api/patients/internal/ai-context",
             "Patient registry (Spring / patient DB)",
         ),
         (
             "/api/doctors/internal/ai-context",
             "DOCTOR_SERVICE_INTERNAL_URLS",
-            "http://localhost:8081/api/doctors/internal/ai-context",
+            "https://ai-hospital-doctor.onrender.com/api/doctors/internal/ai-context",
             "Doctors (Spring / doctor DB)",
         ),
         (
             "/api/pharmacy/internal/ai-context",
             "PHARMACY_SERVICE_INTERNAL_URLS",
-            "http://localhost:8083/api/pharmacy/internal/ai-context",
+            "https://ai-hospital-pharmacy.onrender.com/api/pharmacy/internal/ai-context",
             "Pharmacy (Spring / pharmacy service)",
         ),
     ):
-        candidates = [f"{gateway}{gateway_path}"]
-        candidates.extend(_as_list(os.getenv(fallback_env, "")))
-        if not _as_list(os.getenv(fallback_env, "")):
-            candidates.extend(_as_list(fallback_default))
+        candidates = _candidate_urls(gateway, gateway_path, fallback_env, fallback_default)
         result = _fetch_from_candidates(candidates, headers, label)
         if result:
             parts.append(result)

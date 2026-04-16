@@ -13,17 +13,19 @@ def _missing_key_help() -> str:
         "Hospital data is not connected because AI_INTERNAL_KEY is missing in the "
         "ai-service environment (this is the usual reason for this screen).\n\n"
         "Fix (same secret everywhere):\n"
-        "1. In `hospital-backendprocess/ai-service/.env` add:\n"
+        "1. In `hospital-backendprocess/ai-service/.env` (or your host env) set:\n"
         "   AI_INTERNAL_KEY=choose-a-long-random-secret\n"
-        "   SPRING_GATEWAY_URL=http://localhost:9090\n"
-        "2. Restart **uvicorn** after saving `.env`.\n"
-        "3. Before starting each Spring Boot app, set the same value, e.g. PowerShell:\n"
-        "   $env:AI_INTERNAL_KEY='choose-a-long-random-secret'\n"
-        "   (user-service 8080, doctor 8081, patient 8082, pharmacy 8083 — "
-        "`app.aiInternalKey` reads this env var.)\n"
-        "4. Start **Eureka** (8761), then **API Gateway** (9090), then all Java services, "
-        "then ai-service.\n\n"
-        "Optional: call **POST /store** on ai-service to add pgvector embeddings for extra context."
+        "   SPRING_GATEWAY_URL=https://your-api-gateway.example.com\n"
+        "   (Optional overrides, comma-separated: USER_SERVICE_INTERNAL_URLS, "
+        "PATIENT_SERVICE_INTERNAL_URLS, DOCTOR_SERVICE_INTERNAL_URLS, "
+        "PHARMACY_SERVICE_INTERNAL_URLS — full URLs to each service's "
+        "`/api/.../internal/ai-context` path.)\n"
+        "2. On each Spring Boot service (user, patient, doctor, pharmacy), set the same "
+        "value in `app.aiInternalKey` (e.g. platform env `AI_INTERNAL_KEY`).\n"
+        "3. Deploy or restart **Eureka**, **API Gateway**, then all Java services, then "
+        "ai-service, so the gateway can reach every service over HTTPS.\n"
+        "4. Restart the Python app after changing env.\n\n"
+        "Optional: **POST /store** on ai-service to add pgvector embeddings for extra context."
     )
 
 
@@ -43,8 +45,9 @@ def ask_rag(question: str):
     if not chunks:
         return (
             "No context available. Options: (1) Set AI_INTERNAL_KEY in ai-service and "
-            "app.aiInternalKey in user-service, patient, doctor, and pharmacy; start Eureka + "
-            "gateway + all services; (2) Index text via POST /store into the embeddings table."
+            "matching app.aiInternalKey on each Spring service; ensure SPRING_GATEWAY_URL "
+            "and deployed Eureka + gateway + microservices are up; (2) Index text via "
+            "POST /store into the embeddings table."
         )
 
     context = "\n\n".join(chunks)

@@ -17,9 +17,14 @@ from rag import ask_rag
 from db import store_data
 
 app = FastAPI(title="Hospital RAG AI")
+# Local dev + any HTTPS deployed frontend. Override with AI_SERVICE_CORS_ORIGIN_REGEX if needed.
+_cors_regex = os.getenv(
+    "AI_SERVICE_CORS_ORIGIN_REGEX",
+    r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$|^https://.+",
+)
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_origin_regex=_cors_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
