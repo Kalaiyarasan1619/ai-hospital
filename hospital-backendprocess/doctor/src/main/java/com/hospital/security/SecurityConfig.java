@@ -27,20 +27,29 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configure(http))        // ⭐ ENABLE CORS
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ⭐ MOST IMPORTANT
-                        .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/doctors", "/api/doctors/").permitAll()
-                        .requestMatchers("/api/doctors/internal/ai-context").permitAll()
-                        .requestMatchers("/api/doctors/add", "/api/doctors/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/api/doctors/health").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configure(http))
+            .authorizeHttpRequests(auth -> auth
+
+                // ✅ OPTIONS allow (CORS preflight)
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                // ✅ PUBLIC ENDPOINTS FIRST (VERY IMPORTANT 🔥)
+                .requestMatchers("/", "/health").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/api/doctors/health").permitAll()
+                .requestMatchers("/api/doctors/internal/ai-context").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/doctors", "/api/doctors/").permitAll()
+
+                // 🔐 PROTECTED
+                .requestMatchers("/api/doctors/add", "/api/doctors/delete/**").hasRole("ADMIN")
+                .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN", "USER")
+
+                // 🔒 fallback
+                .anyRequest().authenticated()
+            )
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

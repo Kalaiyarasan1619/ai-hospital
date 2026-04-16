@@ -34,6 +34,11 @@ public class DoctorController {
         return "Doctor";
     }
 
+  @GetMapping("/health")
+public ResponseEntity<String> health() {
+    return ResponseEntity.ok("OK");
+}
+
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<List<Doctor>> getAllDoctors() {
