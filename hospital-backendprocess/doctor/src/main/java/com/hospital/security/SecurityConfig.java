@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/doctors/internal/ai-context").permitAll()
                         .requestMatchers("/api/doctors/add", "/api/doctors/delete/**").hasRole("ADMIN")
                         .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/doctors/health").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
