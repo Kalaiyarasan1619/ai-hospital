@@ -37,6 +37,10 @@ class StoreRequest(BaseModel):
 def home():
     return {"message": "AI RAG Service Running 🔥"}
 
+@app.api_route("/health", methods=["GET", "HEAD"])
+def health():
+    return {"status": "ok"}    
+
 @app.post("/store")
 def store(
     req: StoreRequest,
