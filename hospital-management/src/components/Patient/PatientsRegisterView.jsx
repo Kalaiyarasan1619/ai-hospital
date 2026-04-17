@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   UserPlusIcon,
   CameraIcon,
@@ -32,6 +32,7 @@ function isAdminRole() {
 
 const PatientsRegisterView = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const admin = isAdminRole();
   const [activeTab, setActiveTab] = useState('personal');
   const [profileImage, setProfileImage] = useState(null);
@@ -91,6 +92,23 @@ const PatientsRegisterView = () => {
     validUntil: '',
     coverageAmount: ''
   });
+
+  useEffect(() => {
+    const prefillName = location.state?.prefillName;
+    if (!prefillName) return;
+
+    const parts = String(prefillName).trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return;
+
+    const firstName = parts[0];
+    const lastName = parts.slice(1).join(" ");
+
+    setFormData((prev) => ({
+      ...prev,
+      firstName: prev.firstName || firstName,
+      lastName: prev.lastName || lastName,
+    }));
+  }, [location.state]);
 
   useEffect(() => {
     if (admin) return;
@@ -280,7 +298,16 @@ const PatientsRegisterView = () => {
 
       // Redirect to patient profile after showing success modal
       setTimeout(() => {
-        // navigate(`/patients/${savedPatient.id}`);
+        if (location.state?.redirectToDashboardVisit) {
+          navigate("/dashboard", {
+            state: {
+              openDashboardVisitModal: true,
+              preselectedPatient: savedPatient,
+            },
+          });
+          return;
+        }
+
         navigate('/patient');
       }, 1800);
 

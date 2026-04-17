@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaUserMd, FaTimes, FaCalendarAlt, FaClock } from "react-icons/fa";
 import { CheckCircleIcon, XMarkIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // const PATIENT_API = "http://localhost:8082/api/patients";
 const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
@@ -24,6 +26,27 @@ const DoctorAssignmentModal = ({ isOpen, onClose, patientId, patientName, onAssi
   const [patientMode, setPatientMode] = useState("Outpatient");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const normalizeDayKey = (day) => (day || "").toString().trim().toLowerCase();
+
+  const getDayNameFromDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(`${dateString}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return "";
+    return date.toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
+  };
+
+  const formatDateForInput = (date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const todayDateObj = new Date();
+  todayDateObj.setHours(0, 0, 0, 0);
+  const todayDate = formatDateForInput(todayDateObj);
+  const selectedDateObj = selectedDay ? new Date(`${selectedDay}T00:00:00`) : null;
 
   // Fetch doctors when modal opens
   useEffect(() => {
@@ -69,25 +92,57 @@ const DoctorAssignmentModal = ({ isOpen, onClose, patientId, patientName, onAssi
     setSelectedTime("");
   };
 
-  // Handle day selection
-  const handleDayChange = (e) => {
-    setSelectedDay(e.target.value);
-    setSelectedTime("");
-  };
-
   // Get available working days for selected doctor
   const getWorkingDays = () => {
     if (!selectedDoctor || !selectedDoctor.workingDays) return [];
-    return selectedDoctor.workingDays;
+    return selectedDoctor.workingDays.map(normalizeDayKey);
+  };
+
+  const isWorkingDate = (dateString) => {
+    if (!selectedDoctor) return false;
+    const dayName = getDayNameFromDate(dateString);
+    if (!dayName) return false;
+    return getWorkingDays().includes(dayName);
+  };
+
+  const isDateSelectable = (date) => {
+    const formattedDate = formatDateForInput(date);
+    if (formattedDate < todayDate) return false;
+    return isWorkingDate(formattedDate);
+  };
+
+  // Handle appointment date selection
+  const handleDayChange = (date) => {
+    if (!date) {
+      setSelectedDay("");
+      setSelectedTime("");
+      return;
+    }
+
+    const selectedDate = formatDateForInput(date);
+    if (!isWorkingDate(selectedDate)) {
+      alert("Selected date is not in the doctor's working schedule. Please choose a valid working date.");
+      setSelectedDay("");
+      setSelectedTime("");
+      return;
+    }
+
+    setSelectedDay(selectedDate);
+    setSelectedTime("");
   };
 
   // Get available time slots for selected day
   const getTimeSlots = () => {
-    if (!selectedDoctor || !selectedDay || !selectedDoctor.workingHours || !selectedDoctor.workingHours[selectedDay]) {
+    if (!selectedDoctor || !selectedDay || !selectedDoctor.workingHours) {
       return [];
     }
-    
-    const hours = selectedDoctor.workingHours[selectedDay];
+
+    const dayKey = getDayNameFromDate(selectedDay);
+    if (!dayKey || !selectedDoctor.workingHours[dayKey]) {
+      return [];
+    }
+
+    const hours = selectedDoctor.workingHours[dayKey];
     const startTime = hours.start;
     const endTime = hours.end;
     
@@ -114,7 +169,12 @@ const DoctorAssignmentModal = ({ isOpen, onClose, patientId, patientName, onAssi
     e.preventDefault();
     
     if (!selectedDoctor || !selectedDay || !selectedTime) {
-      alert("Please select a doctor, day and time slot");
+      alert("Please select a doctor, appointment date and time slot");
+      return;
+    }
+
+    if (!isWorkingDate(selectedDay)) {
+      alert("Appointment date must match the doctor's working days.");
       return;
     }
     
@@ -315,30 +375,30 @@ const DoctorAssignmentModal = ({ isOpen, onClose, patientId, patientName, onAssi
                   <h4 className="font-medium text-gray-900 mb-3">Schedule Appointment</h4>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Day Selection */}
+                    {/* Appointment Date Selection */}
                     <div>
                       <label htmlFor="day" className="block text-sm font-medium text-gray-700 mb-1">
-                        Select Day
+                        Select Appointment Date
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                           <FaCalendarAlt className="text-gray-400" />
                         </div>
-                        <select
+                        <DatePicker
                           id="day"
                           className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
-                          value={selectedDay}
+                          selected={selectedDateObj}
                           onChange={handleDayChange}
+                          filterDate={isDateSelectable}
+                          minDate={todayDateObj}
+                          dateFormat="dd-MM-yyyy"
+                          placeholderText="Select appointment date"
                           required
-                        >
-                          <option value="">-- Select a day --</option>
-                          {getWorkingDays().map((day) => (
-                            <option key={day} value={day} className="capitalize">
-                              {day.charAt(0).toUpperCase() + day.slice(1)}
-                            </option>
-                          ))}
-                        </select>
+                        />
                       </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Available days: {getWorkingDays().map((day) => day.charAt(0).toUpperCase() + day.slice(1)).join(", ")}
+                      </p>
                     </div>
                     
                     {/* Time Slot Selection */}
