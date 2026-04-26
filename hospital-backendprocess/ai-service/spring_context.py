@@ -8,7 +8,7 @@ import os
 
 import requests
 
-DEFAULT_GATEWAY = "https://ai-hospital-api-gateway.onrender.com"
+DEFAULT_GATEWAY = "https://ai-hospital-api-gateway-2d4l.onrender.com"
 
 
 def _as_list(value: str) -> list[str]:
@@ -85,25 +85,25 @@ def fetch_live_hospital_context() -> str:
         (
             "/api/users/internal/ai-context",
             "USER_SERVICE_INTERNAL_URLS",
-            "https://ai-hospital-user.onrender.com/api/users/internal/ai-context",
+            "https://ai-hospital-user-ucks.onrender.com/api/users/internal/ai-context",
             "User accounts (Spring / user-service DB)",
         ),
         (
             "/api/patients/internal/ai-context",
             "PATIENT_SERVICE_INTERNAL_URLS",
-            "https://ai-hospital-patient-service.onrender.com/api/patients/internal/ai-context",
+            "https://ai-hospital-patient.onrender.com/api/patients/internal/ai-context",
             "Patient registry (Spring / patient DB)",
         ),
         (
             "/api/doctors/internal/ai-context",
             "DOCTOR_SERVICE_INTERNAL_URLS",
-            "https://ai-hospital-doctor.onrender.com/api/doctors/internal/ai-context",
+            "https://ai-hospital-doctor-lshb.onrender.com/api/doctors/internal/ai-context",
             "Doctors (Spring / doctor DB)",
         ),
         (
             "/api/pharmacy/internal/ai-context",
             "PHARMACY_SERVICE_INTERNAL_URLS",
-            "https://ai-hospital-pharmacy.onrender.com/api/pharmacy/internal/ai-context",
+            "https://ai-hospital-ph.onrender.com/api/pharmacy/internal/ai-context",
             "Pharmacy (Spring / pharmacy service)",
         ),
     ):
