@@ -36,7 +36,7 @@ const AddDoctors = () => {
   const [errors, setErrors] = useState({});
   
   // const DOCTOR_API = 'http://localhost:8081/api/doctors';
-  const DOCTOR_API = 'https://ai-hospital-doctor.onrender.com/api/doctors';
+  const DOCTOR_API = 'https://ai-hospital-doctor-lshb.onrender.com/api/doctors';
 
   // Form data
   const [formData, setFormData] = useState({

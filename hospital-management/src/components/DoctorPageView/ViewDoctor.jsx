@@ -12,7 +12,7 @@ const ViewDoctor = () => {
   const navigate = useNavigate();
 
 
-  const DOCTOR_API = 'https://ai-hospital-doctor.onrender.com/api/doctors';
+    const DOCTOR_API = 'https://ai-hospital-doctor-lshb.onrender.com/api/doctors';
   useEffect(() => {
     const fetchDoctorData = async () => {
       try {

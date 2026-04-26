@@ -37,7 +37,7 @@ const DoctorsList = () => {
     fetchDoctors();
   }, []);
 
-  const DOCTOR_API = 'https://ai-hospital-doctor.onrender.com/api/doctors';
+  const DOCTOR_API = 'https://ai-hospital-doctor-lshb.onrender.com/api/doctors';
 
   const fetchDoctors = async () => {
     try {

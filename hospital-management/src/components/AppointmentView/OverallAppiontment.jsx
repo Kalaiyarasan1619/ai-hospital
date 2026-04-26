@@ -22,8 +22,8 @@ import {
 // const PATIENT_API = 'http://localhost:8082/api/patients';
 // const DOCTOR_API = 'http://localhost:8081/api/doctors';
 
-const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
-const DOCTOR_API = 'https://ai-hospital-doctor.onrender.com/api/doctors';
+const PATIENT_API = 'https://ai-hospital-patient.onrender.com/api/patients';
+const DOCTOR_API = 'https://ai-hospital-doctor-lshb.onrender.com/api/doctors';
 
 function getToken() {
   let t = localStorage.getItem('token');

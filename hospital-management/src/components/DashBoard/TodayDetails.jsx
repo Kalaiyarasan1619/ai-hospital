@@ -15,7 +15,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 // const PATIENT_API = 'http://localhost:8082/api/patients';
-const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
+const PATIENT_API = 'https://ai-hospital-patient.onrender.com/api/patients';
 
 const emptyHourly = () =>
   ['6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM'].map(

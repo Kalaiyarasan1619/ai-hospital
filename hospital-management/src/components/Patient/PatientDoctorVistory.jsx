@@ -22,7 +22,7 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline';
 
-const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
+const PATIENT_API = 'https://ai-hospital-patient.onrender.com/api/patients';
 
 const PatientDoctorHistory = () => {
   const { patientId } = useParams();

@@ -8,7 +8,7 @@ import {
   EyeSlashIcon
 } from '@heroicons/react/24/outline';
 
-const AUTH_API = 'https://ai-hospital-user.onrender.com/api/auth';
+const AUTH_API = 'https://ai-hospital-user-ucks.onrender.com/api/auth';
 const Login = ({ onLoginSuccess, onBack }) => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [showPassword, setShowPassword] = useState(false);

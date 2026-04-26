@@ -30,6 +30,8 @@ import {
 
 import DoctorAssignmentModal from "./DoctorAssignmentModal";
 
+const PATIENT_API = 'https://ai-hospital-patient.onrender.com/api/patients';
+
 const PatientDetails = () => {
   const navigate = useNavigate();
   const { patientId } = useParams();
@@ -52,7 +54,7 @@ const PatientDetails = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:8082/api/patients/${patientId}`,
+        PATIENT_API + `/${patientId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BeakerIcon, CubeIcon, TruckIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 
-const PHARMACY_API = 'https://ai-hospital-pharmacy.onrender.com/api/pharmacy';
+const PHARMACY_API = 'https://ai-hospital-ph.onrender.com/api/pharmacy';
 
 const PHARMACY_APIS = [
   PHARMACY_API + '/details',

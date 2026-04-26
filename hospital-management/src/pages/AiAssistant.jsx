@@ -18,7 +18,7 @@ const buildAskUrls = (rawBase) => {
 // ].filter(Boolean);
 
 const AI_SERVICE_URLS = [
-  'https://ai-hospital-python-ai-service.onrender.com/ask'
+  'https://ai-hospital-python-ai.onrender.com/ask'
 ];
 
 export default function AiAssistant() {

@@ -6,8 +6,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 // const PATIENT_API = "http://localhost:8082/api/patients";
-const PATIENT_API = 'https://ai-hospital-patient-service.onrender.com/api/patients';
-const DOCTOR_API = 'https://ai-hospital-doctor.onrender.com/api/doctors';
+const PATIENT_API = 'https://ai-hospital-patient.onrender.com/api/patients';
+const DOCTOR_API = 'https://ai-hospital-doctor-lshb.onrender.com/api/doctors';
 const getToken = () => {
   let token = localStorage.getItem("token");
   if (token) token = token.replace(/"/g, "");

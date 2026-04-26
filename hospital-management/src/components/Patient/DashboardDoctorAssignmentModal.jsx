@@ -5,7 +5,7 @@ import { FaUserPlus } from "react-icons/fa";
 import { XMarkIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import DoctorAssignmentModal from "./DoctorAssignmentModal";
 
-const PATIENT_API = "https://ai-hospital-patient-service.onrender.com/api/patients";
+const PATIENT_API = "https://ai-hospital-patient.onrender.com/api/patients";
 
 const DashboardDoctorAssignmentModal = ({
   isOpen,
